@@ -1,0 +1,11 @@
+# 比大小程序（Python 版本）
+
+a = float(input("请输入第一个数字: "))
+b = float(input("请输入第二个数字: "))
+
+if a > b:
+    print(f"{a} 大于 {b}")
+elif a < b:
+    print(f"{a} 小于 {b}")
+else:
+    print(f"{a} 等于 {b}")
