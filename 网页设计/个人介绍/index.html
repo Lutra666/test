@@ -303,8 +303,8 @@
             position: fixed;
             left: 18px;
             top: 50%;
-            width: 112px;
-            height: 196px;
+            width: 96px;
+            height: 208px;
             transform-style: preserve-3d;
             --comet-x: 0px;
             --comet-y: 0px;
@@ -319,34 +319,43 @@
             overflow: visible;
         }
 
-        .trail-curve {
+        .trail-particle {
             position: absolute;
-            inset: 0;
-            overflow: visible;
-        }
-
-        .trail-path {
-            fill: none;
-            stroke-linecap: round;
-            stroke-width: 5;
+            left: 50%;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(117,241,255,0.9) 24%, rgba(92,123,255,0.72) 56%, rgba(255,74,188,0.28) 100%);
+            box-shadow: 0 0 12px rgba(117,241,255,0.45), 0 0 24px rgba(255,74,188,0.22);
             opacity: 0;
-            filter: blur(1.2px);
-            mix-blend-mode: screen;
-            animation: trailPathFade 1.35s ease-out forwards;
+            transform: translate(-50%, -50%);
+            animation: particleFade 0.95s ease-out forwards;
+            will-change: transform, opacity;
         }
 
-        .trail-path.a {
-            stroke: rgba(107, 241, 255, 0.68);
+        .trail-particle.small {
+            width: 5px;
+            height: 5px;
+            filter: blur(0.6px);
         }
 
-        .trail-path.b {
-            stroke: rgba(255, 89, 200, 0.52);
-            stroke-width: 8;
-            filter: blur(6px);
+        .trail-particle.large {
+            width: 11px;
+            height: 11px;
+            filter: blur(1px);
         }
 
-        @keyframes trailPathFade {
-            0% { opacity: 0.92; }
+        @keyframes particleFade {
+            0% {
+                opacity: 0.95;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.35);
+            }
+        }
             100% { opacity: 0; }
         }
 
@@ -354,19 +363,27 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            width: 16px;
-            height: 68px;
-            border-radius: 999px 999px 999px 999px / 28px 28px 46px 46px;
+            width: 12px;
+            height: 44px;
+            border-radius: 999px;
             transform-origin: 50% 0%;
-            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(126,240,255,0.18) 12%, rgba(109,103,255,0.34) 38%, rgba(255,87,191,0.46) 68%, rgba(255,189,92,0.16) 100%);
+            background: linear-gradient(180deg, rgba(255,255,255,0), rgba(110,240,255,0.2) 28%, rgba(255,87,191,0.34) 100%);
             filter: blur(5px);
             opacity: 0;
             mix-blend-mode: screen;
-            animation: trailFade 1.05s ease-out forwards;
+            animation: trailFade 0.7s ease-out forwards;
         }
 
         @keyframes trailFade {
-            0% { opacity: 0.86; filter: blur(3px); }
+            0% {
+                opacity: 0.75;
+                filter: blur(3px);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(9px);
+            }
+        }
             100% { opacity: 0; filter: blur(10px); }
         }
 
@@ -383,12 +400,12 @@
         }
 
         .bullet-svg {
-            width: 112px;
-            height: 196px;
+            width: 96px;
+            height: 208px;
             display: block;
             transform-style: preserve-3d;
             transform-origin: 50% 50%;
-            filter: drop-shadow(0 12px 24px rgba(55, 165, 255, 0.24)) drop-shadow(0 0 28px rgba(255, 84, 187, 0.2));
+            filter: drop-shadow(0 14px 26px rgba(64, 194, 255, 0.28)) drop-shadow(0 0 34px rgba(255, 84, 187, 0.22));
             will-change: transform;
         }
 
@@ -397,7 +414,7 @@
             right: 24px;
             top: 50%;
             transform: translateY(-50%);
-            width: 8px;
+            width: 3px;
             height: 72vh;
             max-height: 520px;
             min-height: 280px;
@@ -470,6 +487,34 @@
         }
 
         @keyframes waveRise {
+            0% {
+                transform: translateY(18px) scaleX(0.7);
+                opacity: 0.14;
+            }
+            50% { opacity: 0.62; }
+            100% {
+                transform: translateY(calc(-72vh + 70px)) scaleX(1.1);
+                opacity: 0;
+            }
+        }
+
+        .progress-percent {
+            position: fixed;
+            right: 10px;
+            bottom: 22px;
+            min-width: 48px;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            color: rgba(239, 247, 255, 0.82);
+            padding: 7px 9px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        @media (max-width: 768px) {
             .page-shell {
                 padding: 14px 12px 20px;
             }
@@ -482,51 +527,27 @@
                 padding: 22px 18px;
             }
 
-            #bulletProgress {
-                left: 10px;
-                right: 10px;
-                width: auto;
-                height: 110px;
-                top: auto;
-                bottom: 14px;
-                transform: none;
-            }
-
             .bullet-wrap {
-                left: 0;
-                top: 50%;
-                width: 88px;
-                height: 88px;
-                --comet-x: 0px;
-                --comet-y: 0px;
-            }
-
-            .bullet-shadow {
-                width: 54px;
-                height: 20px;
-                top: 50%;
-                transform: translate(-50%, -50%) rotateZ(0deg);
+                left: 8px;
+                width: 78px;
+                height: 136px;
             }
 
             .bullet-svg {
-                width: 88px;
-                height: 88px;
-                transform-origin: 50% 50%;
-                will-change: transform;
+                width: 78px;
+                height: 136px;
             }
 
             .progress-track {
-                right: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 8px;
-                height: 110px;
+                right: 12px;
+                width: 2px;
+                height: 58vh;
+                min-height: 220px;
             }
 
-            .progress-fill {
-                width: 0;
-                height: 100%;
-                transition: width 0.12s linear;
+            .progress-percent {
+                right: 6px;
+                bottom: 14px;
             }
         }
     </style>
@@ -607,37 +628,57 @@
 
     <div id="bulletProgress" aria-hidden="true">
         <div class="bullet-wrap">
-            <svg class="trail-curve"></svg>
             <div class="trail-layer"></div>
             <div class="bullet-shadow"></div>
-            <svg viewBox="0 0 120 220" class="bullet-svg">
+            <svg viewBox="0 0 160 280" class="bullet-svg">
                 <defs>
-                    <linearGradient id="cycloneCore" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#fff6a6" />
-                        <stop offset="18%" stop-color="#72f1ff" />
-                        <stop offset="42%" stop-color="#5e7dff" />
-                        <stop offset="72%" stop-color="#ff4fc3" />
-                        <stop offset="100%" stop-color="#ff9c4a" />
+                    <radialGradient id="orbCore" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#ffffff" />
+                        <stop offset="16%" stop-color="#e5fdff" />
+                        <stop offset="34%" stop-color="#8df0ff" />
+                        <stop offset="60%" stop-color="#6a75ff" />
+                        <stop offset="84%" stop-color="#ff55c6" />
+                        <stop offset="100%" stop-color="rgba(255,84,197,0)" />
+                    </radialGradient>
+                    <radialGradient id="orbHalo" cx="50%" cy="50%" r="68%">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.96)" />
+                        <stop offset="22%" stop-color="rgba(155,242,255,0.74)" />
+                        <stop offset="56%" stop-color="rgba(103,111,255,0.34)" />
+                        <stop offset="100%" stop-color="rgba(255,84,197,0)" />
+                    </radialGradient>
+                    <linearGradient id="wakeRibbonA" x1="50%" y1="0%" x2="50%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+                        <stop offset="8%" stop-color="rgba(223,252,255,0.55)" />
+                        <stop offset="24%" stop-color="rgba(124,236,255,0.72)" />
+                        <stop offset="52%" stop-color="rgba(96,120,255,0.54)" />
+                        <stop offset="78%" stop-color="rgba(255,92,201,0.34)" />
+                        <stop offset="100%" stop-color="rgba(255,173,91,0)" />
                     </linearGradient>
-                    <linearGradient id="cycloneEdge" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="rgba(255,255,255,0.95)" />
+                    <linearGradient id="wakeRibbonB" x1="50%" y1="0%" x2="50%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+                        <stop offset="20%" stop-color="rgba(255,255,255,0.26)" />
+                        <stop offset="64%" stop-color="rgba(137,238,255,0.24)" />
                         <stop offset="100%" stop-color="rgba(255,255,255,0)" />
                     </linearGradient>
-                    <filter id="cycloneGlow" x="-80%" y="-80%" width="260%" height="260%">
-                        <feGaussianBlur stdDeviation="4.5" result="blur" />
-                        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1.15 0" result="boost"/>
+                    <filter id="orbGlow" x="-160%" y="-160%" width="420%" height="420%">
+                        <feGaussianBlur stdDeviation="8.5" result="blur" />
+                        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1.28 0" result="boost"/>
                         <feMerge>
                             <feMergeNode in="boost" />
                             <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
                 </defs>
-                <g filter="url(#cycloneGlow)">
-                    <path d="M60 12 C76 28 74 44 60 66 C48 84 46 98 56 116 C68 138 64 160 42 188 C62 178 80 160 86 138 C93 112 88 94 76 78 C66 65 66 52 74 40 C80 30 78 20 60 12 Z" fill="url(#cycloneCore)" opacity="0.95"/>
-                    <path d="M60 10 C94 38 92 72 76 104 C64 128 64 148 78 172 C60 164 48 148 44 132 C39 112 44 92 56 74 C67 58 68 42 60 10 Z" fill="url(#cycloneCore)" opacity="0.78"/>
-                    <path d="M60 12 C52 32 50 48 42 66 C30 92 30 122 48 150 C58 166 56 178 34 202 C52 194 64 182 68 166 C74 146 68 126 58 112 C44 92 44 70 54 48 C60 34 64 24 60 12 Z" fill="url(#cycloneCore)" opacity="0.62"/>
-                    <path d="M57 8 C64 26 66 42 62 54 C58 68 48 76 48 96 C48 112 54 128 62 144" stroke="url(#cycloneEdge)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
-                    <circle cx="60" cy="22" r="8" fill="#fff9dc" opacity="0.92"/>
+                <g filter="url(#orbGlow)">
+                    <path d="M80 52 C98 68 104 92 100 118 C95 146 86 170 82 206 C79 226 77 245 80 266 C83 245 81 226 78 206 C74 170 65 146 60 118 C56 92 62 68 80 52 Z" fill="url(#wakeRibbonA)" opacity="0.92"/>
+                    <path d="M80 60 C93 78 96 100 92 123 C88 148 81 171 80 196 C79 171 72 148 68 123 C64 100 67 78 80 60 Z" fill="url(#wakeRibbonB)" opacity="0.86"/>
+                    <path d="M80 62 C89 84 89 109 85 132 C82 151 79 172 80 196 C81 172 78 151 75 132 C71 109 71 84 80 62 Z" stroke="rgba(255,255,255,0.38)" stroke-width="3.6" stroke-linecap="round" opacity="0.52"/>
+                    <path d="M80 58 C66 80 63 104 67 130 C71 155 79 178 80 206" stroke="rgba(119,238,255,0.28)" stroke-width="6" stroke-linecap="round" opacity="0.32"/>
+                    <path d="M80 58 C94 80 97 104 93 130 C89 155 81 178 80 206" stroke="rgba(255,84,197,0.22)" stroke-width="8" stroke-linecap="round" opacity="0.22"/>
+                    <circle cx="80" cy="38" r="18" fill="url(#orbCore)" opacity="0.99"/>
+                    <circle cx="80" cy="38" r="30" fill="url(#orbHalo)" opacity="0.84"/>
+                    <ellipse cx="74" cy="31" rx="6.5" ry="5.5" fill="rgba(255,255,255,0.95)" opacity="0.96"/>
+                    <ellipse cx="80" cy="38" rx="18" ry="18" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.4" opacity="0.55"/>
                 </g>
             </svg>
         </div>
@@ -655,7 +696,6 @@
         const bulletWrap = document.querySelector('.bullet-wrap');
         const bulletSvg = document.querySelector('.bullet-svg');
         const trailLayer = document.querySelector('.trail-layer');
-        const trailCurve = document.querySelector('.trail-curve');
         const isMobile = window.matchMedia('(max-width: 768px)');
 
         let currentRatio = 0;
@@ -667,58 +707,72 @@
         const spawnTrail = (x, y, angle, scale = 1) => {
             const segment = document.createElement('span');
             segment.className = 'trail-segment';
-            segment.style.transform = `translate(-50%, -10%) translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${angle.toFixed(2)}deg) scale(${scale.toFixed(2)})`;
+            segment.style.transform = `translate(-50%, -8%) translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${angle.toFixed(2)}deg) scale(${scale.toFixed(2)})`;
             trailLayer.appendChild(segment);
             segment.addEventListener('animationend', () => segment.remove(), { once: true });
         };
 
-        const spawnCurveTrail = (points) => {
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const glow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const d = `M ${points[0].x} ${points[0].y} C ${points[1].x} ${points[1].y}, ${points[2].x} ${points[2].y}, ${points[3].x} ${points[3].y}`;
-            path.setAttribute('d', d);
-            glow.setAttribute('d', d);
-            path.setAttribute('class', 'trail-path a');
-            glow.setAttribute('class', 'trail-path b');
-            trailCurve.appendChild(glow);
-            trailCurve.appendChild(path);
-            const cleanup = (node) => node.addEventListener('animationend', () => node.remove(), { once: true });
-            cleanup(path);
-            cleanup(glow);
+        const spawnParticle = (x, y, vx, vy, sizeClass = '') => {
+            const particle = document.createElement('span');
+            particle.className = `trail-particle ${sizeClass}`.trim();
+            particle.style.left = `calc(50% + ${x.toFixed(2)}px)`;
+            particle.style.top = `calc(50% + ${y.toFixed(2)}px)`;
+            particle.animate([
+                { transform: 'translate(-50%, -50%) scale(1)', opacity: 0.95 },
+                { transform: `translate(calc(-50% + ${vx.toFixed(2)}px), calc(-50% + ${vy.toFixed(2)}px)) scale(0.35)`, opacity: 0 }
+            ], {
+                duration: 920,
+                easing: 'cubic-bezier(0.18, 0.7, 0.25, 1)',
+                fill: 'forwards'
+            });
+            trailLayer.appendChild(particle);
+            setTimeout(() => particle.remove(), 950);
         };
 
         let lastTrailTime = 0;
-        let previousPoint = null;
 
         const applyBulletMotion = (ratio) => {
-            const orbitHeight = 328;
-            const travelY = ratio * orbitHeight - orbitHeight / 2;
-            const angle = ratio * Math.PI * 12;
-            const wobbleX = Math.sin(angle) * 10;
-            const wobbleY = Math.cos(angle * 0.5) * 6;
-            const cometX = wobbleX;
-            const cometY = travelY + wobbleY;
-            const spinDeg = ratio * 360 * 8;
+            const orbitHeight = Math.min(window.innerHeight * 0.58, 340);
+            const baseY = ratio * orbitHeight - orbitHeight / 2;
+            const turns = 1.3 + ratio * 7.6;
+            const angle = turns * Math.PI * 2;
+            const driftX = Math.sin(angle * 0.75) * 6.5;
+            const driftY = baseY + Math.sin(angle * 0.9) * 5;
 
-            bulletWrap.style.setProperty('--comet-x', `${cometX.toFixed(2)}px`);
-            bulletWrap.style.setProperty('--comet-y', `${cometY.toFixed(2)}px`);
+            bulletWrap.style.setProperty('--comet-x', `${driftX.toFixed(2)}px`);
+            bulletWrap.style.setProperty('--comet-y', `${driftY.toFixed(2)}px`);
+
+            const selfSpin = turns * 360;
+            const bodyScale = 0.985 + Math.cos(angle * 0.8) * 0.012;
+            const depthTilt = 180 + Math.sin(angle * 0.42) * 2.2;
 
             if (isMobile.matches) {
-                bulletSvg.style.transform = `rotate(${(spinDeg + 90).toFixed(2)}deg) scale(0.76)`;
+                bulletSvg.style.transform = `rotate(${(selfSpin + 180).toFixed(2)}deg) scale(0.8)`;
             } else {
-                bulletSvg.style.transform = `rotateX(90deg) rotateY(${spinDeg.toFixed(2)}deg) rotateZ(90deg) scale(${(0.96 + Math.sin(angle * 0.7) * 0.03).toFixed(3)})`;
+                bulletSvg.style.transform = `rotateX(${depthTilt.toFixed(2)}deg) rotateY(${selfSpin.toFixed(2)}deg) rotateZ(0deg) scale(${bodyScale.toFixed(3)})`;
             }
 
-            const currentPoint = { x: 56 + cometX, y: 98 + cometY };
             const now = performance.now();
-            if (!isMobile.matches && previousPoint && now - lastTrailTime > 70) {
-                const cp1 = { x: previousPoint.x + Math.sin(angle - 0.6) * 18, y: previousPoint.y + 18 };
-                const cp2 = { x: currentPoint.x + Math.cos(angle + 0.4) * 16, y: currentPoint.y - 18 };
-                spawnCurveTrail([previousPoint, cp1, cp2, currentPoint]);
-                spawnTrail(cometX * 0.45, cometY + 8, Math.sin(angle) * 18, 0.85 + Math.abs(Math.cos(angle)) * 0.32);
+            if (!isMobile.matches && now - lastTrailTime > 32) {
+                const swirlBase = selfSpin * Math.PI / 180;
+                const px = driftX;
+                const py = driftY + 28;
+
+                spawnTrail(px * 0.12, py + 12, selfSpin * 0.08, 0.48 + Math.abs(Math.sin(angle)) * 0.12);
+
+                for (let i = 0; i < 7; i += 1) {
+                    const phase = swirlBase + i * 0.9;
+                    const radial = 6 + Math.random() * 8;
+                    const vx = Math.cos(phase) * radial * (1.2 + Math.random() * 0.8);
+                    const vy = 14 + Math.random() * 22;
+                    const jitterX = px + Math.cos(phase) * (3 + Math.random() * 4);
+                    const jitterY = py + Math.sin(phase) * 3 + (Math.random() - 0.5) * 6;
+                    const sizeClass = i === 0 ? 'large' : (i % 3 === 0 ? 'small' : '');
+                    spawnParticle(jitterX, jitterY, vx, vy, sizeClass);
+                }
+
                 lastTrailTime = now;
             }
-            previousPoint = currentPoint;
         };
 
         const paintProgress = (ratio) => {
@@ -733,11 +787,7 @@
             }
 
             progressPercent.textContent = percent + '%';
-            progressPercent.style.right = '14px';
-            progressPercent.style.left = 'auto';
-            progressPercent.style.position = 'absolute';
-            progressPercent.style.top = 'calc(50% + 224px)';
-            bulletProgress.style.opacity = 0.58 + ratio * 0.42;
+                        bulletProgress.style.opacity = 0.58 + ratio * 0.42;
             applyBulletMotion(ratio);
         };
 
