@@ -294,16 +294,17 @@
         /* 真实感更强的子弹滚动进度条 */
         #bulletProgress {
             position: fixed;
-            left: 20px;
+            left: 0;
+            right: 0;
             top: 50%;
             transform: translateY(-50%);
             z-index: 999;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            gap: 24px;
             pointer-events: none;
             perspective: 1500px;
+            padding: 0 20px;
         }
 
         .bullet-wrap {
@@ -314,6 +315,7 @@
             --translate-y: 0px;
             transform: translateY(var(--translate-y));
             will-change: transform;
+            flex-shrink: 0;
         }
 
         .bullet-shadow {
@@ -363,13 +365,15 @@
 
         .progress-track {
             position: relative;
-            width: 2px;
+            width: 1px;
             height: 190px;
             border-radius: 999px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+            background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05));
             border: none;
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.05);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.35);
             overflow: hidden;
+            flex-shrink: 0;
+            margin: 0;
         }
 
         .progress-track::before {
@@ -407,16 +411,7 @@
         }
 
         .progress-percent {
-            min-width: 46px;
-            text-align: center;
-            font-size: 12px;
-            letter-spacing: 0.08em;
-            color: rgba(239, 247, 255, 0.82);
-            padding: 6px 8px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+            display: none;
         }
 
         @media (max-width: 840px) {
@@ -448,13 +443,14 @@
             }
 
             #bulletProgress {
-                left: 10px;
-                right: auto;
-                top: 50%;
-                bottom: auto;
-                transform: translateY(-50%);
-                flex-direction: column;
-                gap: 24px;
+                left: 0;
+                right: 0;
+                top: auto;
+                bottom: 18px;
+                transform: none;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 0 10px;
             }
 
             .bullet-wrap {
@@ -478,7 +474,7 @@
             }
 
             .progress-track {
-                width: 2px;
+                width: 1px;
                 height: 190px;
             }
 
