@@ -271,20 +271,7 @@
             }
         }
 
-        /* 鼠标跟踪光效 */
-        #mouseGlow {
-            position: fixed;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(100, 200, 255, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 40px rgba(100, 200, 255, 0.4), 0 0 80px rgba(255, 20, 147, 0.2);
-        }
-
-        /* 点击波纹效果 */
+        /* 为可交互元素添加过渡 */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -298,6 +285,66 @@
             to {
                 transform: scale(4);
                 opacity: 0;
+            }
+        }
+
+        /* 3D子弹进度条 */
+        #bulletProgress {
+            position: fixed;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            width: 50px;
+            height: 200px;
+            background: linear-gradient(180deg, rgba(100, 200, 255, 0.1) 0%, rgba(255, 20, 147, 0.1) 100%);
+            border-radius: 25px;
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.2);
+        }
+
+        .bullet {
+            position: absolute;
+            width: 100%;
+            height: calc(var(--progress, 0%) * 1px);
+            background: linear-gradient(180deg, #64d9ff 0%, #ff1493 100%);
+            box-shadow: 0 0 15px rgba(100, 200, 255, 0.8), 0 0 30px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: bulletRotate 3s linear infinite;
+            border-radius: 50% 50% 0 0;
+        }
+
+        @keyframes bulletRotate {
+            0% {
+                transform: perspective(600px) rotateX(0deg) rotateY(0deg);
+                box-shadow: 0 0 15px rgba(100, 200, 255, 0.8), 0 0 30px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                transform: perspective(600px) rotateX(20deg) rotateY(360deg);
+                box-shadow: 0 0 25px rgba(100, 200, 255, 1), 0 0 40px rgba(255, 20, 147, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.5);
+            }
+            100% {
+                transform: perspective(600px) rotateX(0deg) rotateY(720deg);
+                box-shadow: 0 0 15px rgba(100, 200, 255, 0.8), 0 0 30px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            #bulletProgress {
+                left: auto;
+                right: 10px;
+                top: auto;
+                bottom: 30px;
+                transform: none;
+                width: 200px;
+                height: 50px;
+                border-radius: 25px;
+            }
+
+            .bullet {
+                width: calc(var(--progress, 0%) * 1px);
+                height: 100%;
+                border-radius: 50% 0 0 50%;
             }
         }
 
@@ -379,15 +426,19 @@
         </section>
     </div>
 
-    <!-- 鼠标跟踪光效 -->
-    <div id="mouseGlow"></div>
+    <!-- 3D子弹进度条 -->
+    <div id="bulletProgress">
+        <div class="bullet"></div>
+    </div>
 
     <script>
-        // 鼠标跟踪光效
-        const mouseGlow = document.getElementById('mouseGlow');
-        document.addEventListener('mousemove', (e) => {
-            mouseGlow.style.left = e.clientX + 'px';
-            mouseGlow.style.top = e.clientY + 'px';
+        // 3D子弹进度条
+        const bulletProgress = document.getElementById('bulletProgress');
+        window.addEventListener('scroll', () => {
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = window.scrollY;
+            const scrollPercent = (scrolled / scrollHeight) * 100;
+            bulletProgress.style.setProperty('--progress', scrollPercent + '%');
         });
 
         // Intersection Observer for scroll animations
