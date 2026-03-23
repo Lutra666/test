@@ -291,42 +291,49 @@
         /* 3D子弹进度条 */
         #bulletProgress {
             position: fixed;
-            left: 30px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 999;
             width: 50px;
-            height: 200px;
-            background: linear-gradient(180deg, rgba(100, 200, 255, 0.1) 0%, rgba(255, 20, 147, 0.1) 100%);
-            border-radius: 25px;
-            border: 2px solid rgba(100, 200, 255, 0.3);
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(100, 200, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
 
-        .bullet {
-            position: absolute;
-            width: 100%;
-            height: calc(var(--progress, 0%) * 1px);
-            background: linear-gradient(180deg, #64d9ff 0%, #ff1493 100%);
-            box-shadow: 0 0 15px rgba(100, 200, 255, 0.8), 0 0 30px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
-            animation: bulletRotate 3s linear infinite;
-            border-radius: 50% 50% 0 0;
+        .bullet-svg {
+            width: 50px;
+            height: 100px;
+            filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.6)) drop-shadow(0 0 40px rgba(255, 20, 147, 0.4));
+            animation: bulletSpin 8s ease-in-out infinite;
         }
 
-        @keyframes bulletRotate {
-            0% {
-                transform: perspective(600px) rotateX(0deg) rotateY(0deg);
-                box-shadow: 0 0 15px rgba(100, 200, 255, 0.8), 0 0 30px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+        @keyframes bulletSpin {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.6)) drop-shadow(0 0 40px rgba(255, 20, 147, 0.4));
             }
             50% {
-                transform: perspective(600px) rotateX(20deg) rotateY(360deg);
-                box-shadow: 0 0 25px rgba(100, 200, 255, 1), 0 0 40px rgba(255, 20, 147, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.5);
+                filter: drop-shadow(0 0 30px rgba(100, 200, 255, 0.8)) drop-shadow(0 0 60px rgba(255, 20, 147, 0.6));
             }
-            100% {
-                transform: perspective(600px) rotateX(0deg) rotateY(720deg);
-                box-shadow: 0 0 15px rgba(100, 200, 255, 0.8), 0 0 30px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
-            }
+        }
+
+        .progress-track {
+            width: 6px;
+            height: 150px;
+            background: linear-gradient(180deg, rgba(100, 200, 255, 0.1) 0%, rgba(255, 20, 147, 0.1) 100%);
+            border-radius: 3px;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(100, 200, 255, 0.2);
+        }
+
+        .progress-fill {
+            width: 100%;
+            height: 0;
+            background: linear-gradient(180deg, #64d9ff 0%, #ff1493 100%);
+            box-shadow: 0 0 10px rgba(100, 200, 255, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.3);
+            transition: height 0.1s linear;
         }
 
         @media (max-width: 768px) {
@@ -336,15 +343,23 @@
                 top: auto;
                 bottom: 30px;
                 transform: none;
-                width: 200px;
-                height: 50px;
-                border-radius: 25px;
+                flex-direction: row;
+                gap: 10px;
             }
 
-            .bullet {
-                width: calc(var(--progress, 0%) * 1px);
+            .bullet-svg {
+                width: 100px;
+                height: 50px;
+            }
+
+            .progress-track {
+                width: 150px;
+                height: 6px;
+            }
+
+            .progress-fill {
+                width: 0;
                 height: 100%;
-                border-radius: 50% 0 0 50%;
             }
         }
 
@@ -426,19 +441,50 @@
         </section>
     </div>
 
-    <!-- 3D子弹进度条 -->
+    <!-- 3D旋转子弹进度条 -->
     <div id="bulletProgress">
-        <div class="bullet"></div>
+        <svg viewBox="0 0 40 100" width="40" height="100" class="bullet-svg">
+            <!-- 子弹头部（圆形） -->
+            <circle cx="20" cy="15" r="12" fill="url(#bulletGradient)" filter="url(#bulletGlow)"/>
+            <!-- 子弹体（梯形/锥形） -->
+            <path d="M 12 30 L 8 90 L 20 100 L 32 90 L 28 30 Q 20 25 12 30" 
+                  fill="url(#bulletGradient)" filter="url(#bulletGlow)"/>
+            <!-- 渐变定义 -->
+            <defs>
+                <linearGradient id="bulletGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#64d9ff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ff1493;stop-opacity:1" />
+                </linearGradient>
+                <filter id="bulletGlow">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+        <div class="progress-track">
+            <div class="progress-fill"></div>
+        </div>
     </div>
 
     <script>
-        // 3D子弹进度条
-        const bulletProgress = document.getElementById('bulletProgress');
+        // 3D旋转子弹进度条
+        const bulletSvg = document.querySelector('.bullet-svg');
+        const progressFill = document.querySelector('.progress-fill');
+        
         window.addEventListener('scroll', () => {
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrolled = window.scrollY;
             const scrollPercent = (scrolled / scrollHeight) * 100;
-            bulletProgress.style.setProperty('--progress', scrollPercent + '%');
+            
+            // 更新进度条
+            progressFill.style.height = scrollPercent + '%';
+            
+            // 基于滚动更新子弹旋转角度
+            const rotationAngle = (scrolled / 2) % 360;
+            bulletSvg.style.transform = `perspective(800px) rotateX(${scrolled/5}deg) rotateY(${rotationAngle}deg) rotateZ(${scrolled/3}deg)`;
         });
 
         // Intersection Observer for scroll animations
