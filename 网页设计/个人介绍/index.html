@@ -294,14 +294,14 @@
         /* 真实感更强的子弹滚动进度条 */
         #bulletProgress {
             position: fixed;
-            left: 18px;
+            right: 20px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 999;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 18px;
+            gap: 12px;
             pointer-events: none;
             perspective: 1500px;
         }
@@ -311,6 +311,9 @@
             width: 76px;
             height: 136px;
             transform-style: preserve-3d;
+            --translate-y: 0px;
+            transform: translateY(var(--translate-y));
+            will-change: transform;
         }
 
         .bullet-shadow {
@@ -332,7 +335,6 @@
             transform-style: preserve-3d;
             transform-origin: 50% 52%;
             filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.34)) drop-shadow(0 0 12px rgba(105, 232, 255, 0.08));
-            animation: bulletSpinReal 4.6s cubic-bezier(0.55, 0.05, 0.45, 0.95) infinite;
             will-change: transform;
         }
 
@@ -348,7 +350,9 @@
         }
 
         @keyframes bulletSpinReal {
-            0% { transform: rotateX(-6deg) rotateY(0deg) rotateZ(-5deg) translateZ(0); }
+            0% { transform: rotateX(180deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(180deg) rotateY(360deg) rotateZ(0deg); }
+        }
             16% { transform: rotateX(-2deg) rotateY(72deg) rotateZ(-2deg) translateZ(2px); }
             33% { transform: rotateX(5deg) rotateY(145deg) rotateZ(3deg) translateZ(0); }
             50% { transform: rotateX(7deg) rotateY(180deg) rotateZ(5deg) translateZ(3px); }
@@ -359,7 +363,7 @@
 
         .progress-track {
             position: relative;
-            width: 12px;
+            width: 8px;
             height: 190px;
             border-radius: 999px;
             background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
@@ -456,6 +460,7 @@
             .bullet-wrap {
                 width: 126px;
                 height: 70px;
+                --translate-y: 0px;
             }
 
             .bullet-shadow {
@@ -468,12 +473,14 @@
             .bullet-svg {
                 width: 126px;
                 height: 70px;
-                animation-name: bulletSpinMobile;
                 transform-origin: 52% 50%;
+                will-change: transform;
             }
 
             @keyframes bulletSpinMobile {
-                0% { transform: rotateY(0deg) rotateX(3deg) rotateZ(3deg); }
+                0% { transform: rotateX(180deg) rotateY(0deg) rotateZ(90deg); }
+                100% { transform: rotateX(180deg) rotateY(360deg) rotateZ(90deg); }
+            }
                 50% { transform: rotateY(180deg) rotateX(-4deg) rotateZ(-2deg); }
                 100% { transform: rotateY(360deg) rotateX(3deg) rotateZ(3deg); }
             }
@@ -628,12 +635,35 @@
         const progressFill = document.querySelector('.progress-fill');
         const progressPercent = document.querySelector('.progress-percent');
         const bulletProgress = document.getElementById('bulletProgress');
+        const bulletWrap = document.querySelector('.bullet-wrap');
+        const bulletSvg = document.querySelector('.bullet-svg');
         const isMobile = window.matchMedia('(max-width: 768px)');
 
-        const updateProgress = () => {
-            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrolled = Math.max(window.scrollY, 0);
-            const ratio = scrollHeight > 0 ? Math.min(scrolled / scrollHeight, 1) : 0;
+        let currentRatio = 0;
+        let targetRatio = 0;
+        let rafId = null;
+
+        const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+        const applyBulletMotion = (ratio) => {
+            const spinDeg = ratio * 360 * 3; // 旋转3圈
+
+            if (isMobile.matches) {
+                // 移动端：水平移动
+                const progressWidth = 190; // 假设进度条宽度
+                const translateX = ratio * progressWidth;
+                bulletWrap.style.transform = `translateX(${translateX.toFixed(2)}px)`;
+                bulletSvg.style.transform = `rotateY(${spinDeg.toFixed(2)}deg) rotateZ(90deg)`;
+            } else {
+                // 桌面端：垂直移动
+                const progressHeight = 190;
+                const translateY = ratio * progressHeight;
+                bulletWrap.style.setProperty('--translate-y', `${translateY.toFixed(2)}px`);
+                bulletSvg.style.transform = `rotateY(${spinDeg.toFixed(2)}deg)`;
+            }
+        };
+
+        const paintProgress = (ratio) => {
             const percent = Math.round(ratio * 100);
 
             if (isMobile.matches) {
@@ -646,6 +676,32 @@
 
             progressPercent.textContent = percent + '%';
             bulletProgress.style.opacity = 0.58 + ratio * 0.42;
+            applyBulletMotion(ratio);
+        };
+
+        const animateProgress = () => {
+            currentRatio += (targetRatio - currentRatio) * 0.12;
+            if (Math.abs(targetRatio - currentRatio) < 0.001) {
+                currentRatio = targetRatio;
+            }
+
+            paintProgress(currentRatio);
+
+            if (Math.abs(targetRatio - currentRatio) >= 0.001) {
+                rafId = requestAnimationFrame(animateProgress);
+            } else {
+                rafId = null;
+            }
+        };
+
+        const updateProgress = () => {
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = Math.max(window.scrollY, 0);
+            targetRatio = scrollHeight > 0 ? clamp(scrolled / scrollHeight, 0, 1) : 0;
+
+            if (!rafId) {
+                rafId = requestAnimationFrame(animateProgress);
+            }
         };
 
         updateProgress();
