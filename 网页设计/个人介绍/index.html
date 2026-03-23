@@ -294,94 +294,125 @@
         /* 真实感更强的子弹滚动进度条 */
         #bulletProgress {
             position: fixed;
-            left: 0;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            inset: 0;
             z-index: 999;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             pointer-events: none;
-            perspective: 1500px;
-            padding: 0 20px;
         }
 
         .bullet-wrap {
-            position: relative;
-            width: 76px;
-            height: 136px;
+            position: fixed;
+            left: 18px;
+            top: 50%;
+            width: 112px;
+            height: 196px;
             transform-style: preserve-3d;
-            --translate-y: 0px;
-            transform: translateY(var(--translate-y));
+            --comet-x: 0px;
+            --comet-y: 0px;
+            transform: translate3d(var(--comet-x), var(--comet-y), 0);
             will-change: transform;
-            flex-shrink: 0;
+        }
+
+        .trail-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .trail-curve {
+            position: absolute;
+            inset: 0;
+            overflow: visible;
+        }
+
+        .trail-path {
+            fill: none;
+            stroke-linecap: round;
+            stroke-width: 5;
+            opacity: 0;
+            filter: blur(1.2px);
+            mix-blend-mode: screen;
+            animation: trailPathFade 1.35s ease-out forwards;
+        }
+
+        .trail-path.a {
+            stroke: rgba(107, 241, 255, 0.68);
+        }
+
+        .trail-path.b {
+            stroke: rgba(255, 89, 200, 0.52);
+            stroke-width: 8;
+            filter: blur(6px);
+        }
+
+        @keyframes trailPathFade {
+            0% { opacity: 0.92; }
+            100% { opacity: 0; }
+        }
+
+        .trail-segment {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 16px;
+            height: 68px;
+            border-radius: 999px 999px 999px 999px / 28px 28px 46px 46px;
+            transform-origin: 50% 0%;
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(126,240,255,0.18) 12%, rgba(109,103,255,0.34) 38%, rgba(255,87,191,0.46) 68%, rgba(255,189,92,0.16) 100%);
+            filter: blur(5px);
+            opacity: 0;
+            mix-blend-mode: screen;
+            animation: trailFade 1.05s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 0.86; filter: blur(3px); }
+            100% { opacity: 0; filter: blur(10px); }
         }
 
         .bullet-shadow {
             position: absolute;
             left: 50%;
-            bottom: 4px;
-            width: 26px;
-            height: 92px;
-            transform: translateX(-50%) rotateX(80deg);
-            background: radial-gradient(ellipse at center, rgba(0,0,0,0.42), rgba(0,0,0,0.08) 58%, transparent 72%);
-            filter: blur(6px);
-            opacity: 0.65;
+            top: 50%;
+            width: 38px;
+            height: 138px;
+            transform: translate(-50%, -50%) rotateZ(90deg);
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.28), rgba(0,0,0,0.05) 58%, transparent 72%);
+            filter: blur(8px);
+            opacity: 0.42;
         }
 
         .bullet-svg {
-            width: 76px;
-            height: 136px;
+            width: 112px;
+            height: 196px;
             display: block;
             transform-style: preserve-3d;
-            transform-origin: 50% 52%;
-            filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.34)) drop-shadow(0 0 12px rgba(105, 232, 255, 0.08));
+            transform-origin: 50% 50%;
+            filter: drop-shadow(0 12px 24px rgba(55, 165, 255, 0.24)) drop-shadow(0 0 28px rgba(255, 84, 187, 0.2));
             will-change: transform;
         }
 
-        .bullet-wrap::after {
-            content: "";
-            position: absolute;
-            inset: 4px 18px 10px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-            filter: blur(12px);
-            opacity: 0.35;
-            transform: translateZ(-30px);
-        }
-
-        @keyframes bulletSpinReal {
-            0% { transform: rotateX(180deg) rotateY(0deg) rotateZ(0deg); }
-            100% { transform: rotateX(180deg) rotateY(360deg) rotateZ(0deg); }
-        }
-            16% { transform: rotateX(-2deg) rotateY(72deg) rotateZ(-2deg) translateZ(2px); }
-            33% { transform: rotateX(5deg) rotateY(145deg) rotateZ(3deg) translateZ(0); }
-            50% { transform: rotateX(7deg) rotateY(180deg) rotateZ(5deg) translateZ(3px); }
-            66% { transform: rotateX(2deg) rotateY(245deg) rotateZ(1deg) translateZ(1px); }
-            83% { transform: rotateX(-5deg) rotateY(320deg) rotateZ(-4deg) translateZ(2px); }
-            100% { transform: rotateX(-6deg) rotateY(360deg) rotateZ(-5deg) translateZ(0); }
-        }
-
         .progress-track {
-            position: relative;
-            width: 1px;
-            height: 190px;
+            position: fixed;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 72vh;
+            max-height: 520px;
+            min-height: 280px;
             border-radius: 999px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05));
-            border: none;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.35);
+            background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.03);
             overflow: hidden;
-            flex-shrink: 0;
-            margin: 0;
         }
 
         .progress-track::before {
             content: "";
             position: absolute;
-            inset: 1px;
-            border-radius: inherit;
-            background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent 28%, transparent 72%, rgba(255,255,255,0.04));
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.14), transparent 18%, transparent 82%, rgba(255,255,255,0.08));
             pointer-events: none;
         }
 
@@ -392,44 +423,53 @@
             width: 100%;
             height: 0;
             border-radius: inherit;
-            background:
-                linear-gradient(180deg, #76edff 0%, #5b9cff 42%, #ff6bbf 100%);
-            box-shadow: 0 0 16px rgba(105, 232, 255, 0.42);
+            background: linear-gradient(180deg, #76edff 0%, #5b9cff 42%, #ff6bbf 100%);
+            box-shadow: 0 0 16px rgba(105, 232, 255, 0.3);
             transition: height 0.12s linear;
         }
 
         .progress-fill::after {
             content: "";
             position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0));
+            opacity: 0.65;
+        }
+
+        .progress-wave {
+            position: absolute;
             left: 50%;
-            right: 0;
-            top: 0;
-            height: 12px;
-            border-radius: 999px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
-            filter: blur(0.5px);
+            bottom: 0;
+            width: 18px;
+            height: 76px;
+            transform: translateX(-50%);
+            opacity: 0.8;
+            filter: blur(2px);
+            pointer-events: none;
         }
 
-        .progress-percent {
-            display: none;
+        .progress-wave::before,
+        .progress-wave::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(119, 237, 255, 0.42);
+            border-left-color: transparent;
+            border-right-color: transparent;
+            animation: waveRise 2.2s linear infinite;
         }
 
-        @media (max-width: 840px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .profile-pic {
-                margin: 0 auto;
-            }
-
-            .hero-meta {
-                justify-content: center;
-            }
+        .progress-wave::after {
+            inset: 8px 2px;
+            border-color: rgba(255, 96, 189, 0.38);
+            border-left-color: transparent;
+            border-right-color: transparent;
+            animation-duration: 1.6s;
+            animation-direction: reverse;
         }
 
-        @media (max-width: 768px) {
+        @keyframes waveRise {
             .page-shell {
                 padding: 14px 12px 20px;
             }
@@ -443,45 +483,50 @@
             }
 
             #bulletProgress {
-                left: 0;
-                right: 0;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                height: 110px;
                 top: auto;
-                bottom: 18px;
+                bottom: 14px;
                 transform: none;
-                flex-direction: row;
-                justify-content: space-between;
-                padding: 0 10px;
             }
 
             .bullet-wrap {
-                width: 76px;
-                height: 136px;
-                --translate-y: 0px;
+                left: 0;
+                top: 50%;
+                width: 88px;
+                height: 88px;
+                --comet-x: 0px;
+                --comet-y: 0px;
             }
 
             .bullet-shadow {
-                width: 26px;
-                height: 92px;
-                bottom: 4px;
-                transform: translateX(-50%) rotateX(80deg);
+                width: 54px;
+                height: 20px;
+                top: 50%;
+                transform: translate(-50%, -50%) rotateZ(0deg);
             }
 
             .bullet-svg {
-                width: 76px;
-                height: 136px;
-                transform-origin: 50% 52%;
+                width: 88px;
+                height: 88px;
+                transform-origin: 50% 50%;
                 will-change: transform;
             }
 
             .progress-track {
-                width: 1px;
-                height: 190px;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 110px;
             }
 
             .progress-fill {
-                width: 100%;
-                height: 0;
-                transition: height 0.12s linear;
+                width: 0;
+                height: 100%;
+                transition: width 0.12s linear;
             }
         }
     </style>
@@ -562,59 +607,43 @@
 
     <div id="bulletProgress" aria-hidden="true">
         <div class="bullet-wrap">
+            <svg class="trail-curve"></svg>
+            <div class="trail-layer"></div>
             <div class="bullet-shadow"></div>
-            <svg viewBox="0 0 96 170" class="bullet-svg">
+            <svg viewBox="0 0 120 220" class="bullet-svg">
                 <defs>
-                    <linearGradient id="casingGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#6b4517" />
-                        <stop offset="18%" stop-color="#e0b868" />
-                        <stop offset="38%" stop-color="#8c5d22" />
-                        <stop offset="56%" stop-color="#f1cf85" />
-                        <stop offset="76%" stop-color="#8e5c20" />
-                        <stop offset="100%" stop-color="#5b3a12" />
+                    <linearGradient id="cycloneCore" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#fff6a6" />
+                        <stop offset="18%" stop-color="#72f1ff" />
+                        <stop offset="42%" stop-color="#5e7dff" />
+                        <stop offset="72%" stop-color="#ff4fc3" />
+                        <stop offset="100%" stop-color="#ff9c4a" />
                     </linearGradient>
-                    <linearGradient id="noseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#7da6ff" />
-                        <stop offset="22%" stop-color="#ecf7ff" />
-                        <stop offset="48%" stop-color="#5bd4ff" />
-                        <stop offset="74%" stop-color="#1f5ea9" />
-                        <stop offset="100%" stop-color="#0e264e" />
-                    </linearGradient>
-                    <radialGradient id="shineGrad" cx="35%" cy="25%" r="70%">
+                    <linearGradient id="cycloneEdge" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stop-color="rgba(255,255,255,0.95)" />
-                        <stop offset="18%" stop-color="rgba(255,255,255,0.5)" />
                         <stop offset="100%" stop-color="rgba(255,255,255,0)" />
-                    </radialGradient>
-                    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#4d3110" />
-                        <stop offset="50%" stop-color="#c48d43" />
-                        <stop offset="100%" stop-color="#3f2509" />
                     </linearGradient>
-                    <filter id="metalGlow" x="-40%" y="-40%" width="180%" height="180%">
-                        <feGaussianBlur stdDeviation="1.1" result="blur" />
+                    <filter id="cycloneGlow" x="-80%" y="-80%" width="260%" height="260%">
+                        <feGaussianBlur stdDeviation="4.5" result="blur" />
+                        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1.15 0" result="boost"/>
                         <feMerge>
-                            <feMergeNode in="blur" />
+                            <feMergeNode in="boost" />
                             <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
                 </defs>
-
-                <ellipse cx="48" cy="28" rx="18" ry="28" fill="url(#noseGrad)" filter="url(#metalGlow)" />
-                <path d="M30 47 C34 40 62 40 66 47 L66 122 C66 128 60 133 48 135 C36 133 30 128 30 122 Z" fill="url(#casingGrad)" />
-                <ellipse cx="48" cy="122" rx="18" ry="7" fill="#80531d" opacity="0.55" />
-                <ellipse cx="48" cy="136" rx="21" ry="8.5" fill="url(#rimGrad)" />
-                <ellipse cx="48" cy="140.5" rx="17" ry="5.2" fill="#4b2b0a" opacity="0.9" />
-                <ellipse cx="48" cy="141" rx="6" ry="2.2" fill="#2d1804" opacity="0.85" />
-
-                <path d="M36 10 C42 2 54 2 60 10 C54 8 42 8 36 10 Z" fill="#ffffff" opacity="0.22" />
-                <path d="M34 15 C39 8 57 8 62 15 C57 13 39 13 34 15 Z" fill="url(#shineGrad)" opacity="0.65" />
-                <path d="M36 46 L36 124" stroke="rgba(255,255,255,0.5)" stroke-width="3.8" stroke-linecap="round" opacity="0.32" />
-                <path d="M59 48 L59 121" stroke="rgba(0,0,0,0.22)" stroke-width="4" stroke-linecap="round" opacity="0.34" />
-                <ellipse cx="40" cy="33" rx="4.6" ry="10" fill="rgba(255,255,255,0.36)" opacity="0.45" />
+                <g filter="url(#cycloneGlow)">
+                    <path d="M60 12 C76 28 74 44 60 66 C48 84 46 98 56 116 C68 138 64 160 42 188 C62 178 80 160 86 138 C93 112 88 94 76 78 C66 65 66 52 74 40 C80 30 78 20 60 12 Z" fill="url(#cycloneCore)" opacity="0.95"/>
+                    <path d="M60 10 C94 38 92 72 76 104 C64 128 64 148 78 172 C60 164 48 148 44 132 C39 112 44 92 56 74 C67 58 68 42 60 10 Z" fill="url(#cycloneCore)" opacity="0.78"/>
+                    <path d="M60 12 C52 32 50 48 42 66 C30 92 30 122 48 150 C58 166 56 178 34 202 C52 194 64 182 68 166 C74 146 68 126 58 112 C44 92 44 70 54 48 C60 34 64 24 60 12 Z" fill="url(#cycloneCore)" opacity="0.62"/>
+                    <path d="M57 8 C64 26 66 42 62 54 C58 68 48 76 48 96 C48 112 54 128 62 144" stroke="url(#cycloneEdge)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+                    <circle cx="60" cy="22" r="8" fill="#fff9dc" opacity="0.92"/>
+                </g>
             </svg>
         </div>
         <div class="progress-track">
             <div class="progress-fill"></div>
+            <div class="progress-wave"></div>
         </div>
         <div class="progress-percent">0%</div>
     </div>
@@ -625,6 +654,8 @@
         const bulletProgress = document.getElementById('bulletProgress');
         const bulletWrap = document.querySelector('.bullet-wrap');
         const bulletSvg = document.querySelector('.bullet-svg');
+        const trailLayer = document.querySelector('.trail-layer');
+        const trailCurve = document.querySelector('.trail-curve');
         const isMobile = window.matchMedia('(max-width: 768px)');
 
         let currentRatio = 0;
@@ -633,22 +664,61 @@
 
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+        const spawnTrail = (x, y, angle, scale = 1) => {
+            const segment = document.createElement('span');
+            segment.className = 'trail-segment';
+            segment.style.transform = `translate(-50%, -10%) translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${angle.toFixed(2)}deg) scale(${scale.toFixed(2)})`;
+            trailLayer.appendChild(segment);
+            segment.addEventListener('animationend', () => segment.remove(), { once: true });
+        };
+
+        const spawnCurveTrail = (points) => {
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const glow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const d = `M ${points[0].x} ${points[0].y} C ${points[1].x} ${points[1].y}, ${points[2].x} ${points[2].y}, ${points[3].x} ${points[3].y}`;
+            path.setAttribute('d', d);
+            glow.setAttribute('d', d);
+            path.setAttribute('class', 'trail-path a');
+            glow.setAttribute('class', 'trail-path b');
+            trailCurve.appendChild(glow);
+            trailCurve.appendChild(path);
+            const cleanup = (node) => node.addEventListener('animationend', () => node.remove(), { once: true });
+            cleanup(path);
+            cleanup(glow);
+        };
+
+        let lastTrailTime = 0;
+        let previousPoint = null;
+
         const applyBulletMotion = (ratio) => {
-            const spinDeg = ratio * 360 * 3; // 旋转3圈
+            const orbitHeight = 328;
+            const travelY = ratio * orbitHeight - orbitHeight / 2;
+            const angle = ratio * Math.PI * 12;
+            const wobbleX = Math.sin(angle) * 10;
+            const wobbleY = Math.cos(angle * 0.5) * 6;
+            const cometX = wobbleX;
+            const cometY = travelY + wobbleY;
+            const spinDeg = ratio * 360 * 8;
+
+            bulletWrap.style.setProperty('--comet-x', `${cometX.toFixed(2)}px`);
+            bulletWrap.style.setProperty('--comet-y', `${cometY.toFixed(2)}px`);
 
             if (isMobile.matches) {
-                // 移动端：水平移动
-                const progressWidth = 190;
-                const translateX = ratio * progressWidth;
-                bulletWrap.style.transform = `translateX(${translateX.toFixed(2)}px)`;
-                bulletSvg.style.transform = `rotateX(0deg) rotateY(${spinDeg.toFixed(2)}deg) rotateZ(90deg)`;
+                bulletSvg.style.transform = `rotate(${(spinDeg + 90).toFixed(2)}deg) scale(0.76)`;
             } else {
-                // 桌面端：垂直移动
-                const progressHeight = 190;
-                const translateY = ratio * progressHeight;
-                bulletWrap.style.setProperty('--translate-y', `${translateY.toFixed(2)}px`);
-                bulletSvg.style.transform = `rotateX(0deg) rotateY(${spinDeg.toFixed(2)}deg)`;
+                bulletSvg.style.transform = `rotateX(90deg) rotateY(${spinDeg.toFixed(2)}deg) rotateZ(90deg) scale(${(0.96 + Math.sin(angle * 0.7) * 0.03).toFixed(3)})`;
             }
+
+            const currentPoint = { x: 56 + cometX, y: 98 + cometY };
+            const now = performance.now();
+            if (!isMobile.matches && previousPoint && now - lastTrailTime > 70) {
+                const cp1 = { x: previousPoint.x + Math.sin(angle - 0.6) * 18, y: previousPoint.y + 18 };
+                const cp2 = { x: currentPoint.x + Math.cos(angle + 0.4) * 16, y: currentPoint.y - 18 };
+                spawnCurveTrail([previousPoint, cp1, cp2, currentPoint]);
+                spawnTrail(cometX * 0.45, cometY + 8, Math.sin(angle) * 18, 0.85 + Math.abs(Math.cos(angle)) * 0.32);
+                lastTrailTime = now;
+            }
+            previousPoint = currentPoint;
         };
 
         const paintProgress = (ratio) => {
@@ -663,6 +733,10 @@
             }
 
             progressPercent.textContent = percent + '%';
+            progressPercent.style.right = '14px';
+            progressPercent.style.left = 'auto';
+            progressPercent.style.position = 'absolute';
+            progressPercent.style.top = 'calc(50% + 224px)';
             bulletProgress.style.opacity = 0.58 + ratio * 0.42;
             applyBulletMotion(ratio);
         };
