@@ -3,8 +3,9 @@
 a = float(input("请输入第一个数字: "))
 b = float(input("请输入第二个数字: "))
 c = float(input("请输入第三个数字: "))
+d = float(input("请输入第四个数字: "))
 
-numbers = [a, b, c]
+numbers = [a, b, c, d]
 sorted_numbers = sorted(numbers)
 
 print(f"从小到大排序: {sorted_numbers}")
