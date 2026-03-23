@@ -306,15 +306,15 @@
             width: 50px;
             height: 100px;
             filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.6)) drop-shadow(0 0 40px rgba(255, 20, 147, 0.4));
-            animation: bulletSpin 8s ease-in-out infinite;
+            animation: bulletSpin 4s linear infinite;
         }
 
         @keyframes bulletSpin {
-            0%, 100% {
-                filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.6)) drop-shadow(0 0 40px rgba(255, 20, 147, 0.4));
+            0% {
+                transform: rotateZ(0deg);
             }
-            50% {
-                filter: drop-shadow(0 0 30px rgba(100, 200, 255, 0.8)) drop-shadow(0 0 60px rgba(255, 20, 147, 0.6));
+            100% {
+                transform: rotateZ(360deg);
             }
         }
 
@@ -471,20 +471,14 @@
 
     <script>
         // 3D旋转子弹进度条
-        const bulletSvg = document.querySelector('.bullet-svg');
         const progressFill = document.querySelector('.progress-fill');
         
         window.addEventListener('scroll', () => {
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrolled = window.scrollY;
-            const scrollPercent = (scrolled / scrollHeight) * 100;
             
             // 更新进度条
-            progressFill.style.height = scrollPercent + '%';
-            
-            // 基于滚动更新子弹旋转角度
-            const rotationAngle = (scrolled / 2) % 360;
-            bulletSvg.style.transform = `perspective(800px) rotateX(${scrolled/5}deg) rotateY(${rotationAngle}deg) rotateZ(${scrolled/3}deg)`;
+            progressFill.style.height = (scrolled / scrollHeight * 100) + '%';
         });
 
         // Intersection Observer for scroll animations
