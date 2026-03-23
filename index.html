@@ -306,8 +306,8 @@
         .bullet-svg {
             width: 50px;
             height: 100px;
-            filter: drop-shadow(0 0 8px rgba(100, 200, 255, 0.5)) 
-                    drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            filter: drop-shadow(0 0 6px rgba(0, 217, 255, 0.4)) 
+                    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
             animation: bulletSpin 3s linear infinite;
             transform-style: preserve-3d;
         }
@@ -324,18 +324,18 @@
         .progress-track {
             width: 6px;
             height: 150px;
-            background: linear-gradient(180deg, rgba(100, 200, 255, 0.1) 0%, rgba(255, 20, 147, 0.1) 100%);
+            background: linear-gradient(180deg, rgba(0, 217, 255, 0.08) 0%, rgba(255, 20, 147, 0.08) 100%);
             border-radius: 3px;
-            border: 1px solid rgba(100, 200, 255, 0.2);
+            border: 1px solid rgba(100, 200, 255, 0.15);
             overflow: hidden;
-            box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
         }
 
         .progress-fill {
             width: 100%;
             height: 0;
             background: linear-gradient(180deg, #00d9ff 0%, #ff1493 100%);
-            box-shadow: 0 0 8px rgba(100, 200, 255, 0.6);
+            box-shadow: 0 0 6px rgba(0, 217, 255, 0.5);
             transition: height 0.1s linear;
         }
 
@@ -447,47 +447,58 @@
     <!-- 3D旋转子弹进度条 -->
     <div id="bulletProgress">
         <svg viewBox="0 0 40 100" width="40" height="100" class="bullet-svg">
-            <!-- 子弹头部（弹头） -->
-            <ellipse cx="20" cy="12" rx="11" ry="13" fill="url(#tipGradient)" filter="url(#bulletGlow)"/>
-            
-            <!-- 子弹壳体（圆柱 + 渐锥） -->
-            <path d="M 10 25 L 10 75 L 20 85 L 30 75 L 30 25 Q 20 22 10 25" 
-                  fill="url(#bodyGradient)" filter="url(#bulletGlow)"/>
-            
-            <!-- 左侧暗边（3D效果） -->
-            <path d="M 10 25 L 10 75 L 15 78 L 15 28 Q 12 26 10 25" 
-                  fill="#000000" opacity="0.15"/>
-            
-            <!-- 右侧高光（3D效果） -->
-            <path d="M 30 25 L 30 75 L 25 78 L 25 28 Q 28 26 30 25" 
-                  fill="#ffffff" opacity="0.1"/>
-            
-            <!-- 渐变定义 -->
             <defs>
-                <!-- 弹头渐变 -->
+                <!-- 弹头渐变 - 金属感强 -->
                 <radialGradient id="tipGradient" cx="45%" cy="35%">
-                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.6" />
-                    <stop offset="60%" style="stop-color:#64d9ff;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#1a4d6d;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.7" />
+                    <stop offset="40%" style="stop-color:#00e5ff;stop-opacity:1" />
+                    <stop offset="80%" style="stop-color:#0088cc;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#001a4d;stop-opacity:1" />
                 </radialGradient>
                 
-                <!-- 壳体渐变 -->
+                <!-- 壳体渐变 - 炫彩 -->
                 <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color:#002a4d;stop-opacity:0.8" />
-                    <stop offset="45%" style="stop-color:#00d9ff;stop-opacity:1" />
-                    <stop offset="55%" style="stop-color:#ff1493;stop-opacity:0.9" />
-                    <stop offset="100%" style="stop-color:#003d6d;stop-opacity:0.8" />
+                    <stop offset="0%" style="stop-color:#0066b2;stop-opacity:1" />
+                    <stop offset="25%" style="stop-color:#00d9ff;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#ff0066;stop-opacity:1" />
+                    <stop offset="75%" style="stop-color:#ff69b4;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#003d80;stop-opacity:1" />
+                </linearGradient>
+                
+                <!-- 底部渐变 -->
+                <linearGradient id="baseGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#1a3a52;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#ff1493;stop-opacity:0.8" />
+                    <stop offset="100%" style="stop-color:#1a3a52;stop-opacity:1" />
                 </linearGradient>
                 
                 <!-- 发光滤镜 -->
                 <filter id="bulletGlow">
-                    <feGaussianBlur stdDeviation="0.8" result="coloredBlur"/>
+                    <feGaussianBlur stdDeviation="0.6" result="coloredBlur"/>
                     <feMerge>
                         <feMergeNode in="coloredBlur"/>
                         <feMergeNode in="SourceGraphic"/>
                     </feMerge>
                 </filter>
             </defs>
+            
+            <!-- 子弹头部（弹头） -->
+            <ellipse cx="20" cy="13" rx="11" ry="14" fill="url(#tipGradient)" filter="url(#bulletGlow)"/>
+            
+            <!-- 子弹壳体（圆柱 + 渐锥） -->
+            <path d="M 10 27 L 10 75 L 20 82 L 30 75 L 30 27 Q 20 24 10 27" 
+                  fill="url(#bodyGradient)" filter="url(#bulletGlow)"/>
+            
+            <!-- 子弹底部 -->
+            <ellipse cx="20" cy="82" rx="10" ry="4" fill="url(#baseGradient)" filter="url(#bulletGlow)"/>
+            
+            <!-- 左侧暗边 -->
+            <path d="M 10 27 L 10 75 L 14 77 L 14 29 Q 12 27 10 27" 
+                  fill="#000000" opacity="0.12"/>
+            
+            <!-- 右侧高光 -->
+            <path d="M 30 27 L 30 75 L 26 77 L 26 29 Q 28 27 30 27" 
+                  fill="#ffffff" opacity="0.08"/>
         </svg>
         <div class="progress-track">
             <div class="progress-fill"></div>
