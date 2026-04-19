@@ -100,77 +100,6 @@ function initThemeToggle() {
   });
 }
 
-function initMouseInteractions() {
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (prefersReducedMotion) {
-    return;
-  }
-
-  const root = document.documentElement;
-  const orbA = document.querySelector(".orb-a");
-  const orbB = document.querySelector(".orb-b");
-
-  const updatePageTilt = (event) => {
-    const nx = event.clientX / window.innerWidth - 0.5;
-    const ny = event.clientY / window.innerHeight - 0.5;
-    const tiltX = (nx * 2).toFixed(3);
-    const tiltY = (ny * 2).toFixed(3);
-    root.style.setProperty("--page-tilt-x", tiltX);
-    root.style.setProperty("--page-tilt-y", String(-tiltY));
-
-    if (orbA && orbB) {
-      orbA.style.transform = `translate(${nx * -20}px, ${ny * -16}px)`;
-      orbB.style.transform = `translate(${nx * 24}px, ${ny * 18}px)`;
-    }
-  };
-
-  const glow = byId("cursorGlow");
-  if (glow) {
-    const moveGlow = (event) => {
-      glow.style.left = `${event.clientX}px`;
-      glow.style.top = `${event.clientY}px`;
-      updatePageTilt(event);
-    };
-
-    window.addEventListener("mousemove", moveGlow);
-    window.addEventListener("mouseenter", () => {
-      glow.style.opacity = "1";
-    });
-    window.addEventListener("mouseleave", () => {
-      glow.style.opacity = "0";
-      root.style.setProperty("--page-tilt-x", "0");
-      root.style.setProperty("--page-tilt-y", "0");
-      if (orbA && orbB) {
-        orbA.style.transform = "";
-        orbB.style.transform = "";
-      }
-    });
-  }
-
-  const cards = document.querySelectorAll(".card");
-  cards.forEach((card) => {
-    card.addEventListener("mousemove", (event) => {
-      const rect = card.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
-
-      const rotateY = ((x - cx) / cx) * 8;
-      const rotateX = ((cy - y) / cy) * 8;
-      card.style.setProperty("--mx", `${x}px`);
-      card.style.setProperty("--my", `${y}px`);
-      card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
-    });
-
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = "";
-      card.style.removeProperty("--mx");
-      card.style.removeProperty("--my");
-    });
-  });
-}
-
 function renderStats(stats) {
   return stats
     .map(
@@ -234,7 +163,6 @@ function boot() {
   byId("contactList").innerHTML = renderContacts(companyData.contacts);
   byId("footerText").textContent = companyData.footer;
   initThemeToggle();
-  initMouseInteractions();
 }
 
 boot();
