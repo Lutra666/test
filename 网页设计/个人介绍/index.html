@@ -20,6 +20,10 @@
             --aqua: #1a1a1a;
             --teal: #464646;
             --amber: #7b7b7b;
+            --accent-a: #5c7cff;
+            --accent-b: #d18362;
+            --accent-c: #3d9a86;
+            --accent-d: #8f7ad7;
             --shadow: 0 10px 26px rgba(46, 40, 34, 0.08);
             --bg-grad:
                 linear-gradient(160deg, #f3f3f3 0%, #eaeaea 100%);
@@ -53,6 +57,9 @@
             --radius-xl: 28px;
             --radius-lg: 20px;
             --radius-md: 14px;
+            --ease-ui: cubic-bezier(0.22, 1, 0.36, 1);
+            --dur-fast: 180ms;
+            --dur-mid: 220ms;
         }
 
         body[data-theme="dark"] {
@@ -67,6 +74,10 @@
             --aqua: #f2f2f2;
             --teal: #bdbdbd;
             --amber: #8f8f8f;
+            --accent-a: #88a2ff;
+            --accent-b: #f1ae95;
+            --accent-c: #6fceb0;
+            --accent-d: #b39fff;
             --shadow: 0 12px 26px rgba(0, 0, 0, 0.32);
             --bg-grad:
                 linear-gradient(160deg, #0f0f10 0%, #18181a 100%);
@@ -211,9 +222,7 @@
             padding: 34px;
             box-shadow: var(--shadow);
             isolation: isolate;
-            transform-style: preserve-3d;
-            will-change: transform;
-            transition: transform 0.22s ease;
+            transition: box-shadow 0.22s ease, border-color 0.22s ease;
         }
 
         .hero::after {
@@ -245,6 +254,9 @@
             box-shadow:
                 var(--avatar-shadow);
             border: 1px solid var(--line-soft);
+            transition: transform var(--dur-mid) var(--ease-ui), border-color var(--dur-mid) var(--ease-ui), box-shadow var(--dur-mid) var(--ease-ui), filter var(--dur-mid) var(--ease-ui);
+            will-change: transform;
+            transform-style: preserve-3d;
         }
 
         .avatar img {
@@ -252,6 +264,17 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform var(--dur-mid) var(--ease-ui);
+        }
+
+        .avatar.is-hovered {
+            border-color: color-mix(in srgb, var(--accent-a) 35%, var(--line-soft));
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            filter: saturate(1.02);
+        }
+
+        .avatar.is-hovered img {
+            transform: scale(1.025) translateY(-0.5px);
         }
 
         .eyebrow {
@@ -263,6 +286,12 @@
             font-size: 0.87rem;
             letter-spacing: 0.1em;
             text-transform: uppercase;
+            transition: letter-spacing 0.24s ease, color 0.24s ease;
+        }
+
+        .eyebrow.is-hovered {
+            letter-spacing: 0.112em;
+            color: color-mix(in srgb, var(--eyebrow-color) 72%, var(--accent-a));
         }
 
         .eyebrow::before {
@@ -278,12 +307,31 @@
             color: var(--title);
             letter-spacing: 0.01em;
             margin-bottom: 10px;
+            transition: letter-spacing 0.24s ease, color 0.24s ease;
+        }
+
+        .name-title {
+            display: inline-block;
+            transition: transform var(--dur-mid) var(--ease-ui), letter-spacing var(--dur-mid) var(--ease-ui), color var(--dur-mid) var(--ease-ui), text-shadow var(--dur-mid) var(--ease-ui);
+            will-change: transform;
+        }
+
+        .name-title.is-hovered {
+            letter-spacing: 0.013em;
+            color: color-mix(in srgb, var(--title) 82%, var(--accent-a));
+            text-shadow: 0 6px 14px rgba(92, 124, 255, 0.12);
         }
 
         .subtitle {
             color: var(--muted);
             font-size: 1.05rem;
             max-width: 640px;
+            transition: color 0.24s ease;
+        }
+
+        .subtitle.is-hovered {
+            color: color-mix(in srgb, var(--muted) 82%, var(--accent-c));
+            letter-spacing: 0.003em;
         }
 
         .status {
@@ -294,6 +342,8 @@
             border: 1px solid var(--line-soft);
             background: var(--status-bg);
             min-width: 170px;
+            transition: transform var(--dur-mid) var(--ease-ui), border-color var(--dur-mid) var(--ease-ui), box-shadow var(--dur-mid) var(--ease-ui);
+            will-change: transform;
         }
 
         .status strong {
@@ -301,11 +351,18 @@
             color: var(--status-strong);
             font-size: 0.95rem;
             margin-bottom: 5px;
+            transition: transform 0.22s ease, letter-spacing 0.22s ease;
         }
 
         .status span {
             color: var(--muted);
             font-size: 0.86rem;
+            transition: transform 0.22s ease;
+        }
+
+        .status.is-hovered {
+            border-color: color-mix(in srgb, var(--accent-c) 22%, var(--line-soft));
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
         }
 
         .hero-metrics {
@@ -320,6 +377,7 @@
             border-radius: var(--radius-md);
             background: var(--metric-bg);
             padding: 14px;
+            transition: transform var(--dur-mid) var(--ease-ui), border-color var(--dur-mid) var(--ease-ui), box-shadow var(--dur-mid) var(--ease-ui);
         }
 
         .metric b {
@@ -327,11 +385,31 @@
             color: var(--metric-strong);
             display: block;
             margin-bottom: 6px;
+            transition: transform var(--dur-mid) var(--ease-ui), letter-spacing var(--dur-mid) var(--ease-ui), color var(--dur-mid) var(--ease-ui);
+        }
+
+        .metric.is-hovered {
+            transform: translateY(-1px);
+            border-color: color-mix(in srgb, var(--accent-d) 24%, var(--line-soft));
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .metric.is-hovered b {
+            transform: translateY(-0.5px);
+            letter-spacing: 0.006em;
+            color: var(--accent-a);
         }
 
         .metric small {
             color: var(--muted);
             letter-spacing: 0.02em;
+            transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
+        }
+
+        .metric small.is-hovered {
+            transform: translateY(-0.5px);
+            letter-spacing: 0.024em;
+            color: color-mix(in srgb, var(--muted) 78%, var(--accent-c));
         }
 
         .layout {
@@ -349,13 +427,11 @@
             -webkit-backdrop-filter: blur(12px);
             padding: 24px 22px;
             box-shadow: 0 8px 20px rgba(3, 10, 23, 0.14);
-            transform-style: preserve-3d;
-            will-change: transform;
-            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+            transition: box-shadow 0.24s ease, border-color 0.24s ease;
         }
 
         .card:hover {
-            transform: translateY(-2px);
+            --lift: -3px;
             border-color: var(--card-hover-border);
             box-shadow: 0 12px 24px rgba(1, 8, 20, 0.2);
         }
@@ -371,18 +447,35 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
+            transition: letter-spacing 0.22s ease, color 0.22s ease;
         }
 
         h2::after {
             content: "";
             width: 34px;
             height: 2px;
-            background: linear-gradient(90deg, var(--aqua), var(--amber));
+            background: linear-gradient(90deg, var(--accent-a), var(--accent-b), transparent);
+        }
+
+        .card:hover h2 {
+            letter-spacing: 0.01em;
+            color: color-mix(in srgb, var(--heading2) 85%, var(--accent-d));
         }
 
         p, li {
             color: var(--muted);
             line-height: 1.75;
+        }
+
+        .card p {
+            transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
+        }
+
+        .card:hover p,
+        .card p.is-hovered {
+            transform: translateY(-1px);
+            letter-spacing: 0.004em;
+            color: color-mix(in srgb, var(--muted) 84%, var(--accent-d));
         }
 
         .skills {
@@ -399,12 +492,19 @@
             padding: 8px 14px;
             background: var(--chip-bg);
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
         }
 
         .chip:hover {
             transform: translateY(-1px);
             border-color: var(--chip-border-hover);
             box-shadow: var(--chip-shadow);
+        }
+
+        .chip.is-hovered {
+            transform: translateY(-1px) scale(1.006);
+            border-color: color-mix(in srgb, var(--accent-a) 35%, var(--chip-border-hover));
+            letter-spacing: 0.004em;
         }
 
         .timeline {
@@ -417,6 +517,7 @@
             position: relative;
             margin-bottom: 18px;
             padding-left: 16px;
+            transition: transform 0.24s ease;
         }
 
         .timeline li::before {
@@ -429,12 +530,22 @@
             border-radius: 50%;
             background: linear-gradient(140deg, var(--aqua), var(--amber));
             box-shadow: none;
+            transition: transform 0.24s ease;
+        }
+
+        .timeline li.is-hovered {
+            transform: translateX(1px);
+        }
+
+        .timeline li.is-hovered::before {
+            transform: scale(1.06);
         }
 
         .timeline h3 {
             color: var(--timeline-h3);
             margin-bottom: 4px;
             font-size: 1.02rem;
+            transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
         }
 
         .timeline time {
@@ -443,6 +554,29 @@
             font-size: 0.83rem;
             letter-spacing: 0.03em;
             margin-bottom: 8px;
+            transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
+        }
+
+        .timeline li.is-hovered h3 {
+            transform: translateY(-0.5px);
+            letter-spacing: 0.006em;
+            color: color-mix(in srgb, var(--timeline-h3) 80%, var(--accent-d));
+        }
+
+        .timeline li.is-hovered time {
+            transform: translateY(-0.5px);
+            letter-spacing: 0.034em;
+            color: color-mix(in srgb, var(--timeline-time) 72%, var(--accent-c));
+        }
+
+        .timeline p {
+            transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
+        }
+
+        .timeline p.is-hovered {
+            transform: translateY(-0.5px);
+            letter-spacing: 0.002em;
+            color: color-mix(in srgb, var(--muted) 82%, var(--accent-d));
         }
 
         .contact-list a {
@@ -454,6 +588,15 @@
         .contact-list a:hover {
             color: var(--title);
             border-bottom-color: var(--title);
+        }
+
+        .contact-list p {
+            transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
+        }
+
+        .contact-list p.is-hovered {
+            transform: translateY(-0.5px);
+            letter-spacing: 0.002em;
         }
 
         .scroll-progress {
@@ -609,7 +752,7 @@
                 </div>
                 <div>
                     <span class="eyebrow">Personal Brand Profile</span>
-                    <h1>刘翔 / Xiang Liu</h1>
+                    <h1 class="name-title">刘翔 / Xiang Liu</h1>
                     <p class="subtitle">软件开发者 · 设计师 · 创新者，聚焦高质量交互、稳定性能与审美表达。</p>
                 </div>
                 <div class="status">
@@ -781,20 +924,68 @@
             });
         };
 
-        const addTiltEffect = (element, maxTilt) => {
+        const addMicroTilt = (element, options) => {
+            const state = {
+                currentRX: 0,
+                currentRY: 0,
+                targetRX: 0,
+                targetRY: 0,
+                rafId: null
+            };
+
+            const animate = () => {
+                const easing = options.easing ?? 0.18;
+                state.currentRX += (state.targetRX - state.currentRX) * easing;
+                state.currentRY += (state.targetRY - state.currentRY) * easing;
+                element.style.transform = `perspective(860px) rotateX(${state.currentRX.toFixed(2)}deg) rotateY(${state.currentRY.toFixed(2)}deg) translateY(-2px)`;
+
+                const near = (a, b) => Math.abs(a - b) < 0.02;
+                if (
+                    near(state.currentRX, state.targetRX) &&
+                    near(state.currentRY, state.targetRY)
+                ) {
+                    state.rafId = null;
+                    return;
+                }
+                state.rafId = requestAnimationFrame(animate);
+            };
+
+            const ensureAnimate = () => {
+                if (!state.rafId) {
+                    state.rafId = requestAnimationFrame(animate);
+                }
+            };
+
             element.addEventListener("mousemove", (event) => {
                 const rect = element.getBoundingClientRect();
                 const x = event.clientX - rect.left;
                 const y = event.clientY - rect.top;
-                const px = x / rect.width - 0.5;
-                const py = y / rect.height - 0.5;
-                const rotateY = px * maxTilt * 2;
-                const rotateX = -py * maxTilt * 2;
-                element.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
+                const nx = x / rect.width - 0.5;
+                const ny = y / rect.height - 0.5;
+
+                state.targetRY = nx * options.tilt * 2;
+                state.targetRX = -ny * options.tilt * 2;
+                element.classList.add("is-hovered");
+                ensureAnimate();
             });
 
             element.addEventListener("mouseleave", () => {
-                element.style.transform = "";
+                state.targetRX = 0;
+                state.targetRY = 0;
+                element.classList.remove("is-hovered");
+                ensureAnimate();
+                if (!state.rafId) {
+                    element.style.transform = "";
+                } else {
+                    const clearWhenDone = () => {
+                        if (!state.rafId) {
+                            element.style.transform = "";
+                            return;
+                        }
+                        requestAnimationFrame(clearWhenDone);
+                    };
+                    requestAnimationFrame(clearWhenDone);
+                }
             });
         };
 
@@ -804,13 +995,60 @@
                 return;
             }
 
-            const hero = document.querySelector(".hero");
-            const cards = document.querySelectorAll(".card");
-            if (hero) {
-                addTiltEffect(hero, 2);
+            const status = document.querySelector(".status");
+            const chips = document.querySelectorAll(".chip");
+            const timelineItems = document.querySelectorAll(".timeline li");
+            const metrics = document.querySelectorAll(".metric");
+            const avatar = document.querySelector(".avatar");
+            const nameTitle = document.querySelector(".name-title");
+            const eyebrow = document.querySelector(".eyebrow");
+            const subtitle = document.querySelector(".subtitle");
+            const metricSmalls = document.querySelectorAll(".metric small");
+            const timelineParagraphs = document.querySelectorAll(".timeline p");
+            const contactRows = document.querySelectorAll(".contact-list p");
+
+            if (status) {
+                addMicroTilt(status, { tilt: 1.8, easing: 0.18 });
             }
-            cards.forEach((card) => {
-                addTiltEffect(card, 3);
+
+            metrics.forEach((metric) => {
+                addMicroTilt(metric, { tilt: 1.3, easing: 0.18 });
+            });
+
+            if (avatar) {
+                addMicroTilt(avatar, { tilt: 1.2, easing: 0.18 });
+            }
+
+            if (nameTitle) {
+                addMicroTilt(nameTitle, { tilt: 0.9, easing: 0.2 });
+            }
+
+            if (eyebrow) {
+                addMicroTilt(eyebrow, { tilt: 0.55, easing: 0.2 });
+            }
+
+            if (subtitle) {
+                addMicroTilt(subtitle, { tilt: 0.5, easing: 0.2 });
+            }
+
+            metricSmalls.forEach((item) => {
+                addMicroTilt(item, { tilt: 0.55, easing: 0.2 });
+            });
+
+            timelineParagraphs.forEach((item) => {
+                addMicroTilt(item, { tilt: 0.5, easing: 0.2 });
+            });
+
+            contactRows.forEach((item) => {
+                addMicroTilt(item, { tilt: 0.5, easing: 0.2 });
+            });
+
+            chips.forEach((chip) => {
+                addMicroTilt(chip, { tilt: 0.8, easing: 0.2 });
+            });
+
+            timelineItems.forEach((item) => {
+                addMicroTilt(item, { tilt: 1.1, easing: 0.18 });
             });
         };
 
