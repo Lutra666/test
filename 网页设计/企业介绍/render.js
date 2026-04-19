@@ -100,6 +100,103 @@ function initThemeToggle() {
   });
 }
 
+function addMagneticEffect(element, intensity = 0.22) {
+  element.addEventListener("mousemove", (event) => {
+    const rect = element.getBoundingClientRect();
+    const x = event.clientX - rect.left - rect.width / 2;
+    const y = event.clientY - rect.top - rect.height / 2;
+    element.style.transform = `translate(${x * intensity}px, ${y * intensity}px)`;
+  });
+
+  element.addEventListener("mouseleave", () => {
+    element.style.transform = "";
+  });
+}
+
+function initMouseInteractions() {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) {
+    return;
+  }
+
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card) => {
+    const state = {
+      currentRX: 0,
+      currentRY: 0,
+      currentFX: 0,
+      currentFY: 0,
+      targetRX: 0,
+      targetRY: 0,
+      targetFX: 0,
+      targetFY: 0,
+      rafId: null
+    };
+
+    const animateCard = () => {
+      const easing = 0.18;
+      state.currentRX += (state.targetRX - state.currentRX) * easing;
+      state.currentRY += (state.targetRY - state.currentRY) * easing;
+      state.currentFX += (state.targetFX - state.currentFX) * easing;
+      state.currentFY += (state.targetFY - state.currentFY) * easing;
+
+      card.style.setProperty("--rx", `${state.currentRX.toFixed(2)}deg`);
+      card.style.setProperty("--ry", `${state.currentRY.toFixed(2)}deg`);
+      card.style.setProperty("--fx", `${state.currentFX.toFixed(2)}px`);
+      card.style.setProperty("--fy", `${state.currentFY.toFixed(2)}px`);
+
+      const near = (a, b) => Math.abs(a - b) < 0.02;
+      if (
+        near(state.currentRX, state.targetRX) &&
+        near(state.currentRY, state.targetRY) &&
+        near(state.currentFX, state.targetFX) &&
+        near(state.currentFY, state.targetFY)
+      ) {
+        state.rafId = null;
+        return;
+      }
+      state.rafId = requestAnimationFrame(animateCard);
+    };
+
+    const ensureAnimate = () => {
+      if (!state.rafId) {
+        state.rafId = requestAnimationFrame(animateCard);
+      }
+    };
+
+    card.addEventListener("mousemove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const nx = (x - cx) / cx;
+      const ny = (y - cy) / cy;
+
+      state.targetRY = nx * 4.2;
+      state.targetRX = -ny * 4.2;
+      state.targetFX = nx * 2.6;
+      state.targetFY = ny * 2.2;
+      card.classList.add("is-hovered");
+      ensureAnimate();
+    });
+
+    card.addEventListener("mouseleave", () => {
+      state.targetRX = 0;
+      state.targetRY = 0;
+      state.targetFX = 0;
+      state.targetFY = 0;
+      card.classList.remove("is-hovered");
+      ensureAnimate();
+    });
+  });
+
+  const buttons = document.querySelectorAll(".btn, #themeToggle");
+  buttons.forEach((button) => {
+    addMagneticEffect(button, button.id === "themeToggle" ? 0.18 : 0.14);
+  });
+}
+
 function renderStats(stats) {
   return stats
     .map(
@@ -163,6 +260,7 @@ function boot() {
   byId("contactList").innerHTML = renderContacts(companyData.contacts);
   byId("footerText").textContent = companyData.footer;
   initThemeToggle();
+  initMouseInteractions();
 }
 
 boot();

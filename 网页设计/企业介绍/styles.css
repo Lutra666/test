@@ -1,24 +1,32 @@
 :root {
   --bg: #efefef;
-  --panel: #ffffff;
+  --bg-grad: linear-gradient(160deg, #f3f3f3 0%, #eaeaea 100%);
+  --panel: rgba(255, 255, 255, 0.82);
   --ink: #1f1f1f;
   --muted: #565656;
   --brand: #1a1a1a;
   --brand-strong: #0f0f0f;
+  --accent-a: #5c7cff;
+  --accent-b: #d18362;
+  --accent-c: #3d9a86;
+  --accent-d: #8f7ad7;
   --line: #dddddd;
-  --shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  --shadow: 0 14px 28px rgba(46, 40, 34, 0.08);
+  --shadow-hover: 0 18px 34px rgba(20, 20, 20, 0.14);
+  --edge-highlight: rgba(255, 255, 255, 0.7);
   --btn-main-a: #171717;
   --btn-main-b: #2a2a2a;
   --btn-main-shadow: rgba(0, 0, 0, 0.22);
   --btn-ghost-bg: #f6f6f6;
-  --timeline-line: #d9d0c6;
-  --timeline-dot-ring: #f4ece4;
+  --timeline-line: #d0d0d0;
+  --timeline-dot: #404040;
+  --timeline-dot-ring: #f0f0f0;
   --contact-a: #fafafa;
   --contact-b: #f4f4f4;
   --contact-row-bg: #ffffff;
   --contact-row-border: #e7e7e7;
-  --radius-lg: 24px;
-  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
   --max-width: 1100px;
 }
 
@@ -33,19 +41,30 @@ body {
 }
 
 body {
-  font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  font-family: "Outfit", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   color: var(--ink);
-  background: linear-gradient(160deg, #f3f3f3 0%, #eaeaea 100%);
+  background: var(--bg-grad);
   line-height: 1.65;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.46), transparent 36%),
+    radial-gradient(circle at 86% 82%, rgba(0, 0, 0, 0.05), transparent 34%);
+  z-index: 0;
+}
+
 .theme-toggle {
   position: fixed;
-  top: 18px;
-  right: 18px;
+  top: 16px;
+  right: 16px;
   z-index: 50;
   border: 1px solid var(--line);
   background: var(--panel);
@@ -101,11 +120,11 @@ body {
   width: min(var(--max-width), calc(100% - 2rem));
   margin: 0 auto;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .hero {
-  padding: 90px 0 60px;
+  padding: 74px 0 48px;
   animation: fade-up 0.7s ease-out both;
 }
 
@@ -113,8 +132,9 @@ body {
   font-family: "Outfit", sans-serif;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: var(--brand);
+  color: var(--accent-a);
   margin: 0 0 10px;
+  opacity: 0.78;
 }
 
 h1 {
@@ -129,6 +149,7 @@ h1 {
   margin: 16px 0 10px;
   color: var(--brand-strong);
   font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .intro {
@@ -154,13 +175,23 @@ h1 {
 }
 
 .btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .btn-primary {
   background: linear-gradient(135deg, var(--btn-main-a), var(--btn-main-b));
   color: #fff;
   box-shadow: 0 6px 14px var(--btn-main-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 55%);
+  pointer-events: none;
 }
 
 .btn-ghost {
@@ -171,12 +202,28 @@ h1 {
 
 .cards {
   padding: 16px 0 8px;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.cards:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.03);
 }
 
 h2 {
   font-family: "Outfit", "Noto Sans SC", sans-serif;
-  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
   margin: 0 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h2::after {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-a), var(--accent-b), transparent);
 }
 
 .grid-3 {
@@ -186,26 +233,52 @@ h2 {
 }
 
 .card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --lift: 0px;
+  --fx: 0px;
+  --fy: 0px;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 20px;
   box-shadow: var(--shadow);
   animation: fade-up 0.55s ease-out both;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.22s ease, border-color 0.22s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform-origin: center center;
+  transform: perspective(920px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(var(--lift));
+  backface-visibility: hidden;
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid var(--edge-highlight);
+  pointer-events: none;
+  opacity: 0.42;
+}
+
+.card.is-hovered {
+  --lift: -3px;
+  box-shadow: var(--shadow-hover);
+  border-color: color-mix(in srgb, var(--accent-a) 34%, var(--line));
 }
 
 .stat-num {
   font-family: "Outfit", sans-serif;
   font-size: 1.8rem;
   font-weight: 800;
-  color: var(--brand-strong);
+  color: var(--accent-a);
   margin-bottom: 4px;
+  transform: translate3d(var(--fx), var(--fy), 0);
+  transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
 }
 
 .stat-label,
@@ -216,23 +289,37 @@ h2 {
 .service-title {
   margin: 0 0 6px;
   font-size: 1.06rem;
+  color: color-mix(in srgb, var(--ink) 84%, var(--accent-d));
+  transform: translate3d(var(--fx), var(--fy), 0);
+  transition: transform 0.22s ease, letter-spacing 0.22s ease, color 0.22s ease;
+}
+
+.card.is-hovered .service-title,
+.card.is-hovered .stat-num {
+  letter-spacing: 0.01em;
 }
 
 .timeline-wrap {
   padding: 20px 0 8px;
+  transition: transform 0.25s ease;
+}
+
+.timeline-wrap:hover {
+  transform: translateY(-2px);
 }
 
 .timeline {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-left: 2px solid #d0d0d0;
+  border-left: 2px solid var(--timeline-line);
   margin-left: 12px;
 }
 
 .timeline li {
   position: relative;
   padding: 0 0 18px 18px;
+  transition: transform 0.2s ease;
 }
 
 .timeline li::before {
@@ -243,8 +330,17 @@ h2 {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #404040;
-  border: 2px solid #f0f0f0;
+  background: linear-gradient(140deg, var(--accent-a), var(--accent-c));
+  border: 2px solid var(--timeline-dot-ring);
+  transition: transform 0.2s ease;
+}
+
+.timeline li:hover {
+  transform: translateX(2px);
+}
+
+.timeline li:hover::before {
+  transform: scale(1.08);
 }
 
 .timeline-year {
@@ -266,6 +362,13 @@ h2 {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   color: var(--ink);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.contact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(20, 20, 20, 0.12);
+  border-color: color-mix(in srgb, var(--accent-c) 28%, var(--line));
 }
 
 .contact h2 {
@@ -292,6 +395,7 @@ h2 {
 .contact-label {
   font-weight: 700;
   margin-right: 8px;
+  color: var(--accent-c);
 }
 
 .footer {
@@ -302,29 +406,39 @@ h2 {
 
 body[data-theme="dark"] {
   --bg: #0f0f10;
-  --panel: #19191b;
+  --bg-grad: linear-gradient(160deg, #0f0f10 0%, #18181a 100%);
+  --panel: rgba(25, 25, 27, 0.82);
   --ink: #ececec;
   --muted: #b5b5b5;
   --brand: #f0f0f0;
   --brand-strong: #fafafa;
+  --accent-a: #88a2ff;
+  --accent-b: #f1ae95;
+  --accent-c: #6fceb0;
+  --accent-d: #b39fff;
   --line: #303033;
-  --shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
-  --btn-main-a: #f0f0f0;
-  --btn-main-b: #cfcfcf;
+  --shadow: 0 12px 26px rgba(0, 0, 0, 0.32);
+  --shadow-hover: 0 16px 30px rgba(0, 0, 0, 0.45);
+  --edge-highlight: rgba(255, 255, 255, 0.06);
+  --btn-main-a: #7f96eb;
+  --btn-main-b: #a789c2;
   --btn-main-shadow: rgba(0, 0, 0, 0.28);
   --btn-ghost-bg: #141416;
+  --timeline-line: #3a3a3d;
+  --timeline-dot: #dedede;
+  --timeline-dot-ring: #2a2a2d;
   --contact-a: #18181a;
   --contact-b: #1f1f22;
   --contact-row-bg: #202024;
   --contact-row-border: #333338;
 }
 
-body[data-theme="dark"] {
-  background: linear-gradient(160deg, #0f0f10 0%, #18181a 100%);
+body[data-theme="dark"] .btn-primary {
+  color: #fff;
 }
 
-body[data-theme="dark"] .btn-primary {
-  color: #111;
+body[data-theme="dark"]::before {
+  display: none;
 }
 
 body[data-theme="dark"] .icon-sun {
@@ -390,7 +504,16 @@ body[data-theme="dark"] .icon-moon {
 @media (prefers-reduced-motion: reduce) {
   .card,
   .hero,
-  .contact {
+  .contact,
+  .cards,
+  .timeline-wrap {
     transition: none;
+  }
+
+  .card,
+  .btn,
+  .theme-toggle,
+  .timeline li {
+    transform: none !important;
   }
 }
