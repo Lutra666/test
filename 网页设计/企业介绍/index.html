@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>企业介绍</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+      <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M20 13.2A8.2 8.2 0 1 1 10.8 4a7 7 0 1 0 9.2 9.2z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9" />
+        <path
+          d="M12 2.5v2.3M12 19.2v2.3M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.9"
+          stroke-linecap="round"
+        />
+      </svg>
+      <span class="sr-only">切换主题</span>
+    </button>
+
+    <header class="hero section">
+      <p class="eyebrow">COMPANY PROFILE</p>
+      <h1 id="companyName"></h1>
+      <p class="tagline" id="tagline"></p>
+      <p class="intro" id="introMain"></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contact">联系我们</a>
+        <a class="btn btn-ghost" href="#timeline">查看历程</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section cards" aria-label="核心数据">
+        <h2>核心数据</h2>
+        <div id="statsGrid" class="grid-3"></div>
+      </section>
+
+      <section class="section cards" aria-label="核心业务">
+        <h2>核心业务</h2>
+        <div id="servicesGrid" class="grid-3"></div>
+      </section>
+
+      <section class="section timeline-wrap" id="timeline" aria-label="发展历程">
+        <h2>发展历程</h2>
+        <ol id="timelineList" class="timeline"></ol>
+      </section>
+
+      <section class="section contact" id="contact" aria-label="联系我们">
+        <h2>联系我们</h2>
+        <p id="contactSlogan" class="contact-slogan"></p>
+        <div id="contactList" class="contact-list"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p id="footerText"></p>
+    </footer>
+
+    <script src="./company-data.js"></script>
+    <script src="./render.js"></script>
+  </body>
+</html>
